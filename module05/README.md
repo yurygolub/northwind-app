@@ -16,7 +16,7 @@
 
 1. [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core).
 2. [Getting Started with EF Core](https://docs.microsoft.com/en-us/ef/core/get-started).
-3. [Get the Entity Framework Core runtime](https://docs.microsoft.com/en-us/ef/core/get-started/install/#get-the-entity-framework-core-runtime).
+3. [Installing Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/get-started/overview/install).
 4. [How Entity Framework Works?](https://www.entityframeworktutorial.net/basics/how-entity-framework-works.aspx)
 5. [Context Class in Entity Framework](https://www.entityframeworktutorial.net/basics/context-class-in-entity-framework.aspx)
 6. [What is an Entity in Entity Framework?](https://www.entityframeworktutorial.net/basics/entity-in-entityframework.aspx)
