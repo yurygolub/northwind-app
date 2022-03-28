@@ -39,6 +39,10 @@ namespace NorthwindApiApp
                 case "Sql":
                     services.AddSqlServices(this.Configuration);
                     break;
+
+                case "Ef":
+                    services.AddEfServices(this.Configuration);
+                    break;
             }
 
             services.AddControllers();

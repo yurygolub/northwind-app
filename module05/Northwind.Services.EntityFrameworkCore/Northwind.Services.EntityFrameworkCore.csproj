@@ -29,5 +29,8 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Northwind.Services\Northwind.Services.csproj" />
+    </ItemGroup>
 
 </Project>

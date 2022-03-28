@@ -6,6 +6,7 @@ using Northwind.Services.Employees;
 using Northwind.Services.Products;
 using Northwind.Services.SqlServer;
 using DataAccess = Northwind.Services.DataAccess;
+using EntityFramework = Northwind.Services.EntityFrameworkCore;
 
 #pragma warning disable SA1600
 
@@ -23,6 +24,17 @@ namespace NorthwindApiApp
                 .AddTransient<IEmployeePicturesService, DataAccess.Employees.EmployeePicturesService>()
                 .AddScoped(s => new SqlConnection(configuration.GetConnectionString("SqlConnection")))
                 .AddTransient<NorthwindDataAccessFactory, SqlServerDataAccessFactory>();
+        }
+
+        public static IServiceCollection AddEfServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            return services
+                .AddTransient<IProductManagementService, EntityFramework.Products.ProductManagementService>()
+                .AddTransient<IProductCategoryManagementService, EntityFramework.Products.ProductCategoryManagementService>()
+                .AddTransient<IProductCategoryPicturesService, EntityFramework.Products.ProductCategoryPicturesService>()
+                .AddTransient<IEmployeeManagementService, EntityFramework.Employees.EmployeeManagementService>()
+                .AddTransient<IEmployeePicturesService, EntityFramework.Employees.EmployeePicturesService>()
+                .AddScoped(s => new EntityFramework.Context.NorthwindContext(configuration.GetConnectionString("SqlConnection")));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Northwind.Services.EntityFrameworkCore.Entities;
 
 #nullable disable
@@ -12,11 +11,11 @@ namespace Northwind.Services.EntityFrameworkCore.Context
 {
     public partial class NorthwindContext : DbContext
     {
-        private readonly SqlConnection connection;
+        private readonly string connectionString;
 
-        public NorthwindContext(SqlConnection connection)
+        public NorthwindContext(string connectionString)
         {
-            this.connection = connection;
+            this.connectionString = connectionString;
         }
 
         public NorthwindContext(DbContextOptions<NorthwindContext> options)
@@ -58,7 +57,7 @@ namespace Northwind.Services.EntityFrameworkCore.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(this.connection);
+                optionsBuilder.UseSqlServer(this.connectionString);
             }
         }
 
