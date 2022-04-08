@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Northwind.Services.Employees;
@@ -16,8 +17,8 @@ namespace NorthwindApiApp.Controllers
 
         public EmployeeController(IEmployeeManagementService managementService, IEmployeePicturesService picturesService)
         {
-            this.managementService = managementService;
-            this.picturesService = picturesService;
+            this.managementService = managementService ?? throw new ArgumentNullException(nameof(managementService));
+            this.picturesService = picturesService ?? throw new ArgumentNullException(nameof(picturesService));
         }
 
         [HttpGet]
@@ -41,13 +42,13 @@ namespace NorthwindApiApp.Controllers
         [HttpGet("{id}/photo")]
         public async Task<IActionResult> GetEmployeePhotoAsync(int id)
         {
-            var employee = await this.managementService.GetEmployeeAsync(id);
-            if (employee is null)
+            var employeePhoto = await this.picturesService.GetEmployeePictureAsync(id);
+            if (employeePhoto is null)
             {
                 return this.NotFound();
             }
 
-            return this.File(employee.Photo[78..], "image/bmp");
+            return this.File(employeePhoto, "image/bmp");
         }
 
         [HttpPost]
@@ -91,7 +92,7 @@ namespace NorthwindApiApp.Controllers
         }
 
         [HttpPut("{id}/photo")]
-        public async Task<IActionResult> UpdateProductCategoryPictureAsync(int id, [FromBody] Stream stream)
+        public async Task<IActionResult> UpdateEmployeePhotoAsync(int id, [FromBody] Stream stream)
         {
             if (!await this.picturesService.UpdateEmployeePictureAsync(id, stream))
             {

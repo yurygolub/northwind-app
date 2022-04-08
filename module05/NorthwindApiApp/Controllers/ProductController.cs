@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Northwind.Services.Products;
@@ -14,7 +15,7 @@ namespace NorthwindApiApp.Controllers
 
         public ProductController(IProductManagementService managementService)
         {
-            this.managementService = managementService;
+            this.managementService = managementService ?? throw new ArgumentNullException(nameof(managementService));
         }
 
         [HttpGet]

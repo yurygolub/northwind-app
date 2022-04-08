@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Northwind.Services.Products;
@@ -16,8 +17,8 @@ namespace NorthwindApiApp.Controllers
 
         public ProductCategoriesController(IProductCategoryManagementService managementService, IProductCategoryPicturesService picturesService)
         {
-            this.managementService = managementService;
-            this.picturesService = picturesService;
+            this.managementService = managementService ?? throw new ArgumentNullException(nameof(managementService));
+            this.picturesService = picturesService ?? throw new ArgumentNullException(nameof(picturesService));
         }
 
         [HttpGet]
