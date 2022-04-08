@@ -15,12 +15,12 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
 {
     [Index(nameof(LastName), Name = "LastName")]
     [Index(nameof(PostalCode), Name = "PostalCode")]
-    public partial class Employee
+    public partial class EmployeeEntity
     {
-        public Employee()
+        public EmployeeEntity()
         {
             this.EmployeeTerritories = new HashSet<EmployeeTerritory>();
-            this.InverseReportsToNavigation = new HashSet<Employee>();
+            this.InverseReportsToNavigation = new HashSet<EmployeeEntity>();
             this.Orders = new HashSet<Order>();
         }
 
@@ -64,12 +64,12 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
         public string PhotoPath { get; set; }
 
         [ForeignKey(nameof(ReportsTo))]
-        [InverseProperty(nameof(Employee.InverseReportsToNavigation))]
-        public virtual Employee ReportsToNavigation { get; set; }
+        [InverseProperty(nameof(EmployeeEntity.InverseReportsToNavigation))]
+        public virtual EmployeeEntity ReportsToNavigation { get; set; }
         [InverseProperty(nameof(EmployeeTerritory.Employee))]
         public virtual ICollection<EmployeeTerritory> EmployeeTerritories { get; set; }
-        [InverseProperty(nameof(Employee.ReportsToNavigation))]
-        public virtual ICollection<Employee> InverseReportsToNavigation { get; set; }
+        [InverseProperty(nameof(EmployeeEntity.ReportsToNavigation))]
+        public virtual ICollection<EmployeeEntity> InverseReportsToNavigation { get; set; }
         [InverseProperty(nameof(Order.Employee))]
         public virtual ICollection<Order> Orders { get; set; }
     }

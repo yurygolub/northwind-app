@@ -17,9 +17,9 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
     [Index(nameof(ProductName), Name = "ProductName")]
     [Index(nameof(SupplierId), Name = "SupplierID")]
     [Index(nameof(SupplierId), Name = "SuppliersProducts")]
-    public partial class Product
+    public partial class ProductEntity
     {
-        public Product()
+        public ProductEntity()
         {
             this.OrderDetails = new HashSet<OrderDetail>();
         }
@@ -45,7 +45,7 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
 
         [ForeignKey(nameof(CategoryId))]
         [InverseProperty("Products")]
-        public virtual Category Category { get; set; }
+        public virtual CategoryEntity Category { get; set; }
         [ForeignKey(nameof(SupplierId))]
         [InverseProperty("Products")]
         public virtual Supplier Supplier { get; set; }

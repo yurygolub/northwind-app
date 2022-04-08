@@ -18,7 +18,7 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
     {
         public Supplier()
         {
-            this.Products = new HashSet<Product>();
+            this.Products = new HashSet<ProductEntity>();
         }
 
         [Key]
@@ -48,7 +48,7 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
         [Column(TypeName = "ntext")]
         public string HomePage { get; set; }
 
-        [InverseProperty(nameof(Product.Supplier))]
-        public virtual ICollection<Product> Products { get; set; }
+        [InverseProperty(nameof(ProductEntity.Supplier))]
+        public virtual ICollection<ProductEntity> Products { get; set; }
     }
 }

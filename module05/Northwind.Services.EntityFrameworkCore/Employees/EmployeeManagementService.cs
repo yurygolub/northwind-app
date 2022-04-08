@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Northwind.Services.Employees;
+using Northwind.Services.EntityFrameworkCore.Entities;
 
 namespace Northwind.Services.EntityFrameworkCore.Employees
 {
@@ -117,7 +118,7 @@ namespace Northwind.Services.EntityFrameworkCore.Employees
             return true;
         }
 
-        private static Employee MapEmployee(Entities.Employee employee)
+        private static Employee MapEmployee(EmployeeEntity employee)
         {
             return new Employee()
             {
@@ -142,9 +143,9 @@ namespace Northwind.Services.EntityFrameworkCore.Employees
             };
         }
 
-        private static Entities.Employee MapEmployee(Employee employee)
+        private static EmployeeEntity MapEmployee(Employee employee)
         {
-            return new Entities.Employee()
+            return new EmployeeEntity()
             {
                 EmployeeId = employee.EmployeeID,
                 Address = employee.Address,

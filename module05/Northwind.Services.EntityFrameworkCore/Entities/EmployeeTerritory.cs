@@ -20,7 +20,7 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
 
         [ForeignKey(nameof(EmployeeId))]
         [InverseProperty("EmployeeTerritories")]
-        public virtual Employee Employee { get; set; }
+        public virtual EmployeeEntity Employee { get; set; }
         [ForeignKey(nameof(TerritoryId))]
         [InverseProperty("EmployeeTerritories")]
         public virtual Territory Territory { get; set; }

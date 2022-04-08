@@ -33,6 +33,6 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
         public virtual Order Order { get; set; }
         [ForeignKey(nameof(ProductId))]
         [InverseProperty("OrderDetails")]
-        public virtual Product Product { get; set; }
+        public virtual ProductEntity Product { get; set; }
     }
 }

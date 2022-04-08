@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Northwind.Services.EntityFrameworkCore.Entities;
 using Northwind.Services.Products;
 
 namespace Northwind.Services.EntityFrameworkCore.Products
@@ -141,7 +142,7 @@ namespace Northwind.Services.EntityFrameworkCore.Products
             return true;
         }
 
-        private static Product MapProduct(Entities.Product product)
+        private static Product MapProduct(ProductEntity product)
         {
             return new Product()
             {
@@ -158,9 +159,9 @@ namespace Northwind.Services.EntityFrameworkCore.Products
             };
         }
 
-        private static Entities.Product MapProduct(Product product)
+        private static ProductEntity MapProduct(Product product)
         {
-            return new Entities.Product()
+            return new ProductEntity()
             {
                 ProductId = product.Id,
                 CategoryId = product.CategoryId,

@@ -14,11 +14,11 @@ using Microsoft.EntityFrameworkCore;
 namespace Northwind.Services.EntityFrameworkCore.Entities
 {
     [Index(nameof(CategoryName), Name = "CategoryName")]
-    public partial class Category
+    public partial class CategoryEntity
     {
-        public Category()
+        public CategoryEntity()
         {
-            this.Products = new HashSet<Product>();
+            this.Products = new HashSet<ProductEntity>();
         }
 
         [Key]
@@ -32,7 +32,7 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
         [Column(TypeName = "image")]
         public byte[] Picture { get; set; }
 
-        [InverseProperty(nameof(Product.Category))]
-        public virtual ICollection<Product> Products { get; set; }
+        [InverseProperty(nameof(ProductEntity.Category))]
+        public virtual ICollection<ProductEntity> Products { get; set; }
     }
 }

@@ -62,7 +62,7 @@ namespace Northwind.Services.EntityFrameworkCore.Entities
         public virtual Customer Customer { get; set; }
         [ForeignKey(nameof(EmployeeId))]
         [InverseProperty("Orders")]
-        public virtual Employee Employee { get; set; }
+        public virtual EmployeeEntity Employee { get; set; }
         [ForeignKey(nameof(ShipVia))]
         [InverseProperty(nameof(Shipper.Orders))]
         public virtual Shipper ShipViaNavigation { get; set; }
