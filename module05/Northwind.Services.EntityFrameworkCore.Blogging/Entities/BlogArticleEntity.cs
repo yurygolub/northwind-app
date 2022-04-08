@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Northwind.Services.EntityFrameworkCore.Blogging.Entities
 {
-    public class BlogArticle
+    public class BlogArticleEntity
     {
         [Key]
         [Column("blog_article_id")]

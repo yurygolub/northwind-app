@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Northwind.Services.Blogging;
 using Northwind.Services.EntityFrameworkCore.Blogging.Context;
+using Northwind.Services.EntityFrameworkCore.Blogging.Entities;
 
 namespace Northwind.Services.EntityFrameworkCore.Blogging
 {
@@ -54,7 +55,7 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
                 throw new ArgumentNullException(nameof(blogArticle));
             }
 
-            Entities.BlogArticle blogArticleEntity = MapBlogArticle(blogArticle);
+            BlogArticleEntity blogArticleEntity = MapBlogArticle(blogArticle);
 
             blogArticleEntity.Posted = DateTime.Now;
 
@@ -98,7 +99,7 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
             return true;
         }
 
-        private static BlogArticle MapBlogArticle(Entities.BlogArticle blogArticle)
+        private static BlogArticle MapBlogArticle(BlogArticleEntity blogArticle)
         {
             return new BlogArticle()
             {
@@ -110,9 +111,9 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
             };
         }
 
-        private static Entities.BlogArticle MapBlogArticle(BlogArticle blogArticle)
+        private static BlogArticleEntity MapBlogArticle(BlogArticle blogArticle)
         {
-            return new Entities.BlogArticle()
+            return new BlogArticleEntity()
             {
                 Posted = blogArticle.Posted,
                 AuthorId = blogArticle.AuthorId,
