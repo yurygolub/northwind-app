@@ -1,8 +1,12 @@
 ﻿using System.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Northwind.Services;
+using Northwind.Services.Blogging;
 using Northwind.Services.Employees;
+using Northwind.Services.EntityFrameworkCore.Blogging;
+using Northwind.Services.EntityFrameworkCore.Blogging.Context;
 using Northwind.Services.Products;
 using Northwind.Services.SqlServer;
 using DataAccess = Northwind.Services.DataAccess;
@@ -34,6 +38,8 @@ namespace NorthwindApiApp
                 .AddTransient<IProductCategoryPicturesService, EntityFramework.Products.ProductCategoryPicturesService>()
                 .AddTransient<IEmployeeManagementService, EntityFramework.Employees.EmployeeManagementService>()
                 .AddTransient<IEmployeePicturesService, EntityFramework.Employees.EmployeePicturesService>()
+                .AddTransient<IBloggingService, BloggingService>()
+                .AddTransient<IDesignTimeDbContextFactory<BloggingContext>, DesignTimeBloggingContextFactory>()
                 .AddScoped(s => new EntityFramework.Context.NorthwindContext(configuration.GetConnectionString("SqlConnection")));
         }
     }
