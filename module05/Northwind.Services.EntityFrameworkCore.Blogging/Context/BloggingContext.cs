@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Northwind.Services.EntityFrameworkCore.Blogging.Entities;
 
 namespace Northwind.Services.EntityFrameworkCore.Blogging.Context
 {
-    public class BloggingContext
+    public class BloggingContext : DbContext
     {
+        public BloggingContext(DbContextOptions<BloggingContext> options)
+            : base(options)
+        {
+        }
+
+        public virtual DbSet<BlogArticle> BlogArticles { get; set; }
     }
 }
