@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Northwind.Services.Blogging;
 using Northwind.Services.Employees;
+using Northwind.Services.Products;
 using NorthwindApiApp.Models;
 
 #pragma warning disable SA1600
@@ -11,20 +12,22 @@ using NorthwindApiApp.Models;
 namespace NorthwindApiApp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/articles")]
     public class BlogArticlesController : ControllerBase
     {
         private readonly IBloggingService bloggingService;
         private readonly IEmployeeManagementService employeeService;
+        private readonly IProductManagementService productService;
 
-        public BlogArticlesController(IBloggingService bloggingService, IEmployeeManagementService employeeService)
+        public BlogArticlesController(IBloggingService bloggingService, IEmployeeManagementService employeeService, IProductManagementService productService)
         {
             this.bloggingService = bloggingService ?? throw new ArgumentNullException(nameof(bloggingService));
             this.employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
+            this.productService = productService ?? throw new ArgumentNullException(nameof(productService));
         }
 
         [HttpGet]
-        public async IAsyncEnumerable<BlogArticleShortInfo> GetBlogArticles([FromQuery] int offset = 0, [FromQuery] int limit = 10)
+        public async IAsyncEnumerable<BlogArticleShortInfo> GetBlogArticlesAsync([FromQuery] int offset = 0, [FromQuery] int limit = 10)
         {
             await foreach (var blogArticle in this.bloggingService.GetBlogArticlesAsync(offset, limit))
             {
@@ -88,6 +91,34 @@ namespace NorthwindApiApp.Controllers
         public async Task<IActionResult> UpdateBlogArticleAsync(int id, [FromBody] BlogArticle blogArticle)
         {
             if (!await this.bloggingService.UpdateBlogArticleAsync(id, blogArticle))
+            {
+                return this.NotFound();
+            }
+
+            return this.NoContent();
+        }
+
+        [HttpGet("{articleId}/products")]
+        public async IAsyncEnumerable<Product> GetAllRelatedProductsAsync(int articleId, [FromQuery] int offset = 0, [FromQuery] int limit = 10)
+        {
+            var productIds = this.bloggingService.GetAllRelatedProductIdsAsync(articleId, offset, limit);
+            await foreach (var productId in productIds)
+            {
+                yield return await this.productService.GetProductAsync(productId);
+            }
+        }
+
+        [HttpPost("{articleId}/products/{productId}")]
+        public async Task<IActionResult> CreateProductLinkAsync(int articleId, int productId)
+        {
+            await this.bloggingService.CreateProductLinkAsync(articleId, productId);
+            return this.Ok();
+        }
+
+        [HttpDelete("{articleId}/products/{productId}")]
+        public async Task<IActionResult> RemoveProductLinkAsync(int articleId, int productId)
+        {
+            if (!await this.bloggingService.RemoveProductLinkAsync(articleId, productId))
             {
                 return this.NotFound();
             }

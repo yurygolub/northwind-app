@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Northwind.Services.Blogging;
 using Northwind.Services.EntityFrameworkCore.Blogging.Context;
 using Northwind.Services.EntityFrameworkCore.Blogging.Entities;
+using Northwind.Services.Products;
 
 namespace Northwind.Services.EntityFrameworkCore.Blogging
 {
@@ -97,6 +98,49 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
 
             await this.context.SaveChangesAsync();
             return true;
+        }
+
+        public async IAsyncEnumerable<int> GetAllRelatedProductIdsAsync(int articleId, int offset, int limit)
+        {
+            var productIds = this.context.BlogArticleProducts
+                .Where(b => b.BlogArticleId == articleId)
+                .Skip(offset)
+                .Take(limit)
+                .Select(b => b.ProductId);
+
+            await foreach (var productId in productIds.AsAsyncEnumerable())
+            {
+                yield return productId;
+            }
+        }
+
+        public async Task<int> CreateProductLinkAsync(int articleId, int productId)
+        {
+            var blogArticleProductEntity = new BlogArticleProductEntity()
+            {
+                BlogArticleId = articleId,
+                ProductId = productId,
+            };
+
+            await this.context.BlogArticleProducts.AddAsync(blogArticleProductEntity);
+            await this.context.SaveChangesAsync();
+
+            return blogArticleProductEntity.Id;
+        }
+
+        public async Task<bool> RemoveProductLinkAsync(int articleId, int productId)
+        {
+            var blogArticleProductEntity = await this.context.BlogArticleProducts
+                .FirstAsync(b => (b.BlogArticleId == articleId) && (b.ProductId == productId));
+
+            if (blogArticleProductEntity != null)
+            {
+                this.context.BlogArticleProducts.Remove(blogArticleProductEntity);
+                await this.context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
 
         private static BlogArticle MapBlogArticle(BlogArticleEntity blogArticle)
