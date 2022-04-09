@@ -13,5 +13,7 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging.Context
         public virtual DbSet<BlogArticleEntity> BlogArticles { get; set; }
 
         public virtual DbSet<BlogArticleProductEntity> BlogArticleProducts { get; set; }
+
+        public virtual DbSet<BlogCommentEntity> BlogComments { get; set; }
     }
 }
