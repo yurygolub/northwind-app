@@ -20,5 +20,13 @@ namespace Northwind.Services.Blogging
         Task<int> CreateProductLinkAsync(int articleId, int productId);
 
         Task<bool> RemoveProductLinkAsync(int articleId, int productId);
+
+        IAsyncEnumerable<BlogComment> GetAllBlogCommentsAsync(int articleId, int offset, int limit);
+
+        Task<int> CreateBlogCommentAsync(int articleId, BlogComment blogComment);
+
+        Task<bool> UpdateBlogCommentAsync(int articleId, int commentId, BlogComment blogComment);
+
+        Task<bool> DeleteBlogCommentAsync(int articleId, int commentId);
     }
 }

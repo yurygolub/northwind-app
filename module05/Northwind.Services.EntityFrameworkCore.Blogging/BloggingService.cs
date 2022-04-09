@@ -143,6 +143,69 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
             return false;
         }
 
+        public async IAsyncEnumerable<BlogComment> GetAllBlogCommentsAsync(int articleId, int offset, int limit)
+        {
+            var blogComments = this.context.BlogComments
+                .Where(b => b.BlogArticleId == articleId)
+                .Skip(offset)
+                .Take(limit)
+                .Select(b => MapBlogComment(b));
+
+            await foreach (var blogComment in blogComments.AsAsyncEnumerable())
+            {
+                yield return blogComment;
+            }
+        }
+
+        public async Task<int> CreateBlogCommentAsync(int articleId, BlogComment blogComment)
+        {
+            _ = blogComment ?? throw new ArgumentNullException(nameof(blogComment));
+
+            var blogCommentEntity = MapBlogComment(blogComment);
+            blogCommentEntity.BlogArticleId = articleId;
+            blogCommentEntity.Posted = DateTime.Now;
+
+            await this.context.BlogComments.AddAsync(blogCommentEntity);
+            await this.context.SaveChangesAsync();
+
+            return blogCommentEntity.Id;
+        }
+
+        public async Task<bool> UpdateBlogCommentAsync(int articleId, int commentId, BlogComment blogComment)
+        {
+            _ = blogComment ?? throw new ArgumentNullException(nameof(blogComment));
+
+            var blogCommentEntity = await this.context.BlogComments
+                .FirstAsync(c => (c.BlogArticleId == articleId) && (c.Id == commentId));
+
+            if (blogCommentEntity is null)
+            {
+                return false;
+            }
+
+            blogCommentEntity.AuthorId = blogComment.AuthorId;
+            blogCommentEntity.Text = blogComment.Text;
+            blogCommentEntity.Posted = DateTime.Now;
+
+            await this.context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteBlogCommentAsync(int articleId, int commentId)
+        {
+            var blogCommentEntity = await this.context.BlogComments
+                .FirstOrDefaultAsync(c => (c.BlogArticleId == articleId) && (c.Id == commentId));
+
+            if (blogCommentEntity != null)
+            {
+                this.context.BlogComments.Remove(blogCommentEntity);
+                await this.context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
         private static BlogArticle MapBlogArticle(BlogArticleEntity blogArticle)
         {
             return new BlogArticle()
@@ -164,6 +227,30 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
                 Title = blogArticle.Title,
                 Id = blogArticle.Id,
                 Text = blogArticle.Text,
+            };
+        }
+
+        private static BlogComment MapBlogComment(BlogCommentEntity blogComment)
+        {
+            return new BlogComment()
+            {
+                Posted = blogComment.Posted,
+                AuthorId = blogComment.AuthorId,
+                Id = blogComment.Id,
+                Text = blogComment.Text,
+                BlogArticleId = blogComment.BlogArticleId,
+            };
+        }
+
+        private static BlogCommentEntity MapBlogComment(BlogComment blogComment)
+        {
+            return new BlogCommentEntity()
+            {
+                Posted = blogComment.Posted,
+                AuthorId = blogComment.AuthorId,
+                Id = blogComment.Id,
+                Text = blogComment.Text,
+                BlogArticleId = blogComment.BlogArticleId,
             };
         }
     }

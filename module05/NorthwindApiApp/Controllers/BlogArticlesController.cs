@@ -125,5 +125,48 @@ namespace NorthwindApiApp.Controllers
 
             return this.NoContent();
         }
+
+        [HttpGet("{articleId}/comments")]
+        public async IAsyncEnumerable<BlogComment> GetAllBlogCommentsAsync(int articleId, [FromQuery] int offset = 0, [FromQuery] int limit = 10)
+        {
+            var blogComments = this.bloggingService.GetAllBlogCommentsAsync(articleId, offset, limit);
+            await foreach (var blogComment in blogComments)
+            {
+                yield return blogComment;
+            }
+        }
+
+        [HttpPost("{articleId}/comments")]
+        public async Task<IActionResult> CreateBlogCommentAsync(int articleId, [FromBody] BlogComment blogComment)
+        {
+            _ = blogComment ?? throw new ArgumentNullException(nameof(blogComment));
+
+            await this.bloggingService.CreateBlogCommentAsync(articleId, blogComment);
+            return this.Ok();
+        }
+
+        [HttpPut("{articleId}/comments/{id}")]
+        public async Task<IActionResult> UpdateBlogCommentAsync(int articleId, int id, [FromBody] BlogComment blogComment)
+        {
+            _ = blogComment ?? throw new ArgumentNullException(nameof(blogComment));
+
+            if (!await this.bloggingService.UpdateBlogCommentAsync(articleId, id, blogComment))
+            {
+                return this.NotFound();
+            }
+
+            return this.NoContent();
+        }
+
+        [HttpDelete("{articleId}/comments/{id}")]
+        public async Task<IActionResult> DeleteBlogCommentAsync(int articleId, int id)
+        {
+            if (!await this.bloggingService.DeleteBlogCommentAsync(articleId, id))
+            {
+                return this.NotFound();
+            }
+
+            return this.NoContent();
+        }
     }
 }
