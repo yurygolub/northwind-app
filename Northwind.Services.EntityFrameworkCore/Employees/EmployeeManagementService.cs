@@ -49,6 +49,14 @@ namespace Northwind.Services.EntityFrameworkCore.Employees
             if (employee != null)
             {
                 this.context.Employees.Remove(employee);
+
+                var orders = this.context.Orders.Where(order => order.Employee == employee);
+                this.context.Orders.RemoveRange(orders);
+
+                var orderDetails = orders.SelectMany(
+                    o => this.context.OrderDetails.Where(orderDet => orderDet.Order == o));
+                this.context.OrderDetails.RemoveRange(orderDetails);
+
                 await this.context.SaveChangesAsync();
                 return true;
             }
