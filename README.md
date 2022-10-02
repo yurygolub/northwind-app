@@ -137,7 +137,55 @@ set "Mode" to use one of the following service types
 * "Ef" - use local database using Entity Framework Core
 * "Sql" use local database using ADO.NET
 
-### Create database
+### Create databases
+
+#### Northwind
 before using local database services you have to create a database
 * create database using SQL script [instnwnd.sql](https://github.com/microsoft/sql-server-samples/blob/master/samples/databases/northwind-pubs/instnwnd.sql)
 * create stored procedures using this file: \northwind-app\Northwind.DataAccess.SqlServer\Sql scripts\dbo.CreaterProcedures.sql
+
+#### NorthwindBlogging
+
+##### PowerShell
+
+install ef tool:
+```sh
+dotnet tool install --global dotnet-ef
+```
+
+set environment variable:
+```sh
+$env:SQLCONNSTR_NORTHWIND_BLOGGING = 'data source=(localdb)\MSSQLLocalDB; Integrated Security=True; Initial Catalog=NorthwindBlogging;'
+```
+
+show environment variables:
+```sh
+dir env:
+```
+
+migrate database:
+```sh
+dotnet ef database update --project Northwind.Services.EntityFrameworkCore.Blogging\Northwind.Services.EntityFrameworkCore.Blogging.csproj --context BloggingContext
+```
+
+##### Command prompt
+
+install ef tool:
+```sh
+dotnet tool install --global dotnet-ef
+```
+
+set environment variable:
+```sh
+set SQLCONNSTR_NORTHWIND_BLOGGING=data source=(localdb)\MSSQLLocalDB; Integrated Security=True; Initial Catalog=NorthwindBlogging;
+```
+
+show environment variables:
+```sh
+set
+```
+
+migrate database:
+```sh
+dotnet ef database update --project Northwind.Services.EntityFrameworkCore.Blogging\Northwind.Services.EntityFrameworkCore.Blogging.csproj --context BloggingContext
+```
