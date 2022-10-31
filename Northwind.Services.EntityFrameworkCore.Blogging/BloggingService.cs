@@ -2,25 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Northwind.Services.Blogging;
 using Northwind.Services.EntityFrameworkCore.Blogging.Context;
 using Northwind.Services.EntityFrameworkCore.Blogging.Entities;
-using Northwind.Services.Products;
 
 namespace Northwind.Services.EntityFrameworkCore.Blogging
 {
     public class BloggingService : IBloggingService
     {
         private readonly BloggingContext context;
+        private readonly IMapper mapper;
 
-        public BloggingService(IDesignTimeDbContextFactory<BloggingContext> factory)
+        public BloggingService(IDesignTimeDbContextFactory<BloggingContext> factory, IMapper mapper)
         {
             if (factory is null)
             {
                 throw new ArgumentNullException(nameof(factory));
             }
+
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
             this.context = factory.CreateDbContext(null);
         }
@@ -30,7 +33,7 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
             var blogArticles = this.context.BlogArticles
                     .Skip(offset)
                     .Take(limit)
-                    .Select(b => MapBlogArticle(b));
+                    .Select(b => this.mapper.Map<BlogArticle>(b));
 
             await foreach (var blogArticle in blogArticles.AsAsyncEnumerable())
             {
@@ -46,7 +49,7 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
                 return null;
             }
 
-            return MapBlogArticle(blogArticleEntity);
+            return this.mapper.Map<BlogArticle>(blogArticleEntity);
         }
 
         public async Task<int> CreateBlogArticleAsync(BlogArticle blogArticle)
@@ -56,7 +59,7 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
                 throw new ArgumentNullException(nameof(blogArticle));
             }
 
-            BlogArticleEntity blogArticleEntity = MapBlogArticle(blogArticle);
+            BlogArticleEntity blogArticleEntity = this.mapper.Map<BlogArticleEntity>(blogArticle);
 
             blogArticleEntity.Posted = DateTime.Now;
 
@@ -149,7 +152,7 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
                 .Where(b => b.BlogArticleId == articleId)
                 .Skip(offset)
                 .Take(limit)
-                .Select(b => MapBlogComment(b));
+                .Select(b => this.mapper.Map<BlogComment>(b));
 
             await foreach (var blogComment in blogComments.AsAsyncEnumerable())
             {
@@ -161,7 +164,7 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
         {
             _ = blogComment ?? throw new ArgumentNullException(nameof(blogComment));
 
-            var blogCommentEntity = MapBlogComment(blogComment);
+            var blogCommentEntity = this.mapper.Map<BlogCommentEntity>(blogComment);
             blogCommentEntity.BlogArticleId = articleId;
             blogCommentEntity.Posted = DateTime.Now;
 
@@ -204,54 +207,6 @@ namespace Northwind.Services.EntityFrameworkCore.Blogging
             }
 
             return false;
-        }
-
-        private static BlogArticle MapBlogArticle(BlogArticleEntity blogArticle)
-        {
-            return new BlogArticle()
-            {
-                Posted = blogArticle.Posted,
-                AuthorId = blogArticle.AuthorId,
-                Title = blogArticle.Title,
-                Id = blogArticle.Id,
-                Text = blogArticle.Text,
-            };
-        }
-
-        private static BlogArticleEntity MapBlogArticle(BlogArticle blogArticle)
-        {
-            return new BlogArticleEntity()
-            {
-                Posted = blogArticle.Posted,
-                AuthorId = blogArticle.AuthorId,
-                Title = blogArticle.Title,
-                Id = blogArticle.Id,
-                Text = blogArticle.Text,
-            };
-        }
-
-        private static BlogComment MapBlogComment(BlogCommentEntity blogComment)
-        {
-            return new BlogComment()
-            {
-                Posted = blogComment.Posted,
-                AuthorId = blogComment.AuthorId,
-                Id = blogComment.Id,
-                Text = blogComment.Text,
-                BlogArticleId = blogComment.BlogArticleId,
-            };
-        }
-
-        private static BlogCommentEntity MapBlogComment(BlogComment blogComment)
-        {
-            return new BlogCommentEntity()
-            {
-                Posted = blogComment.Posted,
-                AuthorId = blogComment.AuthorId,
-                Id = blogComment.Id,
-                Text = blogComment.Text,
-                BlogArticleId = blogComment.BlogArticleId,
-            };
         }
     }
 }
