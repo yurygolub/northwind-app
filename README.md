@@ -13,23 +13,23 @@ dotnet run
 
 #### Products
 
-| Operation        | HTTP Verb | URI                | Request body | Response body |
-| ---------------- | --------- | ------------------ | ------------ |  ------------ |
-| Create           | POST      | /api/products      |              |               |
-| Read (all items) | GET       | /api/products      |              |               |
-| Read (item)      | GET       | /api/products/{id} |              |               |
-| Update           | PUT       | /api/products/{id} |              |               |
-| Delete           | DELETE    | /api/products/{id} |              |               |
+| Operation        | HTTP Verb | URI                |
+| ---------------- | --------- | ------------------ |
+| Create           | POST      | /api/products      |
+| Read (all items) | GET       | /api/products      |
+| Read (item)      | GET       | /api/products/{id} |
+| Update           | PUT       | /api/products/{id} |
+| Delete           | DELETE    | /api/products/{id} |
 
 #### ProductCategories
 
-| Operation        | HTTP Verb | URI                  | Request body | Response body |
-| ---------------- | --------- | -------------------- | ------------ |  ------------ |
-| Create           | POST      | /api/categories      |              |               |
-| Read (all items) | GET       | /api/categories      |              |               |
-| Read (item)      | GET       | /api/categories/{id} |              |               |
-| Update           | PUT       | /api/categories/{id} |              |               |
-| Delete           | DELETE    | /api/categories/{id} |              |               |
+| Operation        | HTTP Verb | URI                  |
+| ---------------- | --------- | -------------------- |
+| Create           | POST      | /api/categories      |
+| Read (all items) | GET       | /api/categories      |
+| Read (item)      | GET       | /api/categories/{id} |
+| Update           | PUT       | /api/categories/{id} |
+| Delete           | DELETE    | /api/categories/{id} |
 
 | Operation        | HTTP Verb | URI                                  | Request body    | Response body  |
 | ---------------- | --------- | ------------------------------------ | --------------- | -------------- |
@@ -39,13 +39,13 @@ dotnet run
 
 #### Employees
 
-| Operation        | HTTP Verb | URI                 | Request body | Response body |
-| ---------------- | --------- | ------------------- | ------------ | ------------- |
-| Create           | POST      | /api/employees      |              |               |
-| Read (all items) | GET       | /api/employees      |              |               |
-| Read (item)      | GET       | /api/employees/{id} |              |               |
-| Update           | PUT       | /api/employees/{id} |              |               |
-| Delete           | DELETE    | /api/employees/{id} |              |               |
+| Operation        | HTTP Verb | URI                 |
+| ---------------- | --------- | ------------------- |
+| Create           | POST      | /api/employees      |
+| Read (all items) | GET       | /api/employees      |
+| Read (item)      | GET       | /api/employees/{id} |
+| Update           | PUT       | /api/employees/{id} |
+| Delete           | DELETE    | /api/employees/{id} |
 
 | Operation        | HTTP Verb | URI                               | Request body    | Response body  |
 | ---------------- | --------- | --------------------------------- | --------------- | -------------- |
@@ -55,13 +55,13 @@ dotnet run
 
 #### Blogging
 
-| Operation        | HTTP Verb | URI                | Request body | Response body |
-| ---------------- | --------- | ------------------ | ------------ | ------------- |
-| Create           | POST      | /api/articles      |              |               |
-| Read (all items) | GET       | /api/articles      |              |               |
-| Read (item)      | GET       | /api/articles/{id} |              |               |
-| Update           | PUT       | /api/articles/{id} |              |               |
-| Delete           | DELETE    | /api/articles/{id} |              |               |
+| Operation        | HTTP Verb | URI                |
+| ---------------- | --------- | ------------------ |
+| Create           | POST      | /api/articles      |
+| Read (all items) | GET       | /api/articles      |
+| Read (item)      | GET       | /api/articles/{id} |
+| Update           | PUT       | /api/articles/{id} |
+| Delete           | DELETE    | /api/articles/{id} |
 
 Create JSON payload structure:
 
@@ -109,23 +109,23 @@ Update JSON payload structure:
 }
 ```
 
-| Operation                                           | HTTP Verb | URI                                      | Request body | Response body |
-| --------------------------------------------------- | --------- | ---------------------------------------- | ------------ | ------------- |
-| Return all related products                         |           | /api/articles/{article-id}/products      |              |               |
-| Create a link to a product for an article           |           | /api/articles/{article-id}/products/{id} |              |               |
-| Remove an existed link to a product from an article |           | /api/articles/{article-id}/products/{id} |              |               |
+| Operation                                           | HTTP Verb | URI                                      |
+| --------------------------------------------------- | --------- | ---------------------------------------- |
+| Return all related products                         | GET       | /api/articles/{article-id}/products      |
+| Create a link to a product for an article           | POST      | /api/articles/{article-id}/products/{id} |
+| Remove an existed link to a product from an article | DELETE    | /api/articles/{article-id}/products/{id} |
 
 #### Comments
 
-| Operation        | HTTP Verb | URI                                      | Request body | Response body |
-| ---------------- | --------- | ---------------------------------------- | ------------ | ------------- |
-| Create           |           | /api/articles/{article-id}/comments      |              |               |
-| Read (all items) |           | /api/articles/{article-id}/comments      |              |               |
-| Update           |           | /api/articles/{article-id}/comments/{id} |              |               |
-| Delete           |           | /api/articles/{article-id}/comments/{id} |              |               |
+| Operation        | HTTP Verb | URI                                      |
+| ---------------- | --------- | ---------------------------------------- |
+| Create           | POST      | /api/articles/{article-id}/comments      |
+| Read (all items) | GET       | /api/articles/{article-id}/comments      |
+| Update           | PUT       | /api/articles/{article-id}/comments/{id} |
+| Delete           | DELETE    | /api/articles/{article-id}/comments/{id} |
 
 ### Change start mode
-use file \northwind-apps-module-4\NorthwindApiApp\Properties\launchSettings.json
+use file \northwind-app\NorthwindApiApp\Properties\launchSettings.json
 set the "ASPNETCORE_ENVIRONMENT" environment variable to "Prod" to run in production mode
 
 ### Change services
@@ -165,7 +165,7 @@ dir env:
 
 migrate database:
 ```sh
-dotnet ef database update --project Northwind.Services.EntityFrameworkCore.Blogging\Northwind.Services.EntityFrameworkCore.Blogging.csproj --context BloggingContext
+dotnet ef database update --project Northwind.Services.EntityFrameworkCore.Blogging
 ```
 
 ##### Command prompt
@@ -187,5 +187,5 @@ set
 
 migrate database:
 ```sh
-dotnet ef database update --project Northwind.Services.EntityFrameworkCore.Blogging\Northwind.Services.EntityFrameworkCore.Blogging.csproj --context BloggingContext
+dotnet ef database update --project Northwind.Services.EntityFrameworkCore.Blogging
 ```
