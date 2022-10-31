@@ -44,12 +44,7 @@ namespace Northwind.Services.DataAccess.Products
         /// <inheritdoc/>
         public async Task<bool> DeleteCategoryAsync(int categoryId)
         {
-            if (await this.dataAccessObject.DeleteProductCategoryAsync(categoryId))
-            {
-                return true;
-            }
-
-            return false;
+            return await this.dataAccessObject.DeleteProductCategoryAsync(categoryId);
         }
 
         /// <inheritdoc/>
