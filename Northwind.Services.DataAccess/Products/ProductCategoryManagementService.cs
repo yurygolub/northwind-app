@@ -25,10 +25,7 @@ namespace Northwind.Services.DataAccess.Products
         /// <param name="mapper">Mapper for entity mapping.</param>
         public ProductCategoryManagementService(NorthwindDataAccessFactory northwindDataAccessFactory, IMapper mapper)
         {
-            if (northwindDataAccessFactory is null)
-            {
-                throw new ArgumentNullException(nameof(northwindDataAccessFactory));
-            }
+            _ = northwindDataAccessFactory ?? throw new ArgumentNullException(nameof(northwindDataAccessFactory));
 
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
@@ -38,10 +35,7 @@ namespace Northwind.Services.DataAccess.Products
         /// <inheritdoc/>
         public async Task<int> CreateCategoryAsync(ProductCategory productCategory)
         {
-            if (productCategory is null)
-            {
-                throw new ArgumentNullException(nameof(productCategory));
-            }
+            _ = productCategory ?? throw new ArgumentNullException(nameof(productCategory));
 
             return await this.dataAccessObject.InsertProductCategoryAsync(
                 this.mapper.Map<ProductCategoryTransferObject>(productCategory));
@@ -61,10 +55,7 @@ namespace Northwind.Services.DataAccess.Products
         /// <inheritdoc/>
         public async IAsyncEnumerable<ProductCategory> GetCategoriesByNameAsync(IEnumerable<string> names)
         {
-            if (names is null)
-            {
-                throw new ArgumentNullException(nameof(names));
-            }
+            _ = names ?? throw new ArgumentNullException(nameof(names));
 
             var productCategories = this.dataAccessObject.SelectProductCategoriesByNameAsync(names);
             await foreach (var productCategory in productCategories)
@@ -88,8 +79,8 @@ namespace Northwind.Services.DataAccess.Products
         {
             try
             {
-                var productTransferObject = await this.dataAccessObject.FindProductCategoryAsync(categoryId);
-                return this.mapper.Map<ProductCategory>(productTransferObject);
+                var productCategoryTransferObject = await this.dataAccessObject.FindProductCategoryAsync(categoryId);
+                return this.mapper.Map<ProductCategory>(productCategoryTransferObject);
             }
             catch (ProductCategoryNotFoundException)
             {
@@ -100,19 +91,11 @@ namespace Northwind.Services.DataAccess.Products
         /// <inheritdoc/>
         public async Task<bool> UpdateCategoryAsync(int categoryId, ProductCategory productCategory)
         {
-            if (productCategory is null)
-            {
-                throw new ArgumentNullException(nameof(productCategory));
-            }
+            _ = productCategory ?? throw new ArgumentNullException(nameof(productCategory));
 
-            if (await this.dataAccessObject.UpdateProductCategoryAsync(
+            return await this.dataAccessObject.UpdateProductCategoryAsync(
                 categoryId,
-                this.mapper.Map<ProductCategoryTransferObject>(productCategory)))
-            {
-                return true;
-            }
-
-            return false;
+                this.mapper.Map<ProductCategoryTransferObject>(productCategory));
         }
     }
 }
